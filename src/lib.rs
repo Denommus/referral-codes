@@ -74,36 +74,12 @@ pub struct Config {
     pub charset: Charset,
 }
 
-impl Config {
-    pub fn new() -> Config {
+impl Default for Config {
+    fn default() -> Self {
         Config {
             pattern: Pattern::Length(8),
             count: 1,
             charset: Charset::Alphanumeric,
-        }
-    }
-
-    pub fn with_pattern(self, pattern: Pattern) -> Self {
-        Self {
-            pattern,
-            count: self.count,
-            charset: self.charset,
-        }
-    }
-
-    pub fn with_count(self, count: usize) -> Self {
-        Self {
-            pattern: self.pattern,
-            count,
-            charset: self.charset,
-        }
-    }
-
-    pub fn with_charset(self, charset: Charset) -> Self {
-        Self {
-            pattern: self.pattern,
-            count: self.count,
-            charset,
         }
     }
 }
@@ -148,10 +124,11 @@ pub fn generate(config: &Config) -> Result<Vec<String>, ReferralCodeError> {
 
 #[test]
 fn test_generate() {
-    let config = Config::new()
-        .with_charset(Charset::Alphanumeric)
-        .with_count(3)
-        .with_pattern(Pattern::Length(8));
+    let config = Config {
+        charset: Charset::Alphanumeric,
+        count: 3,
+        pattern: Pattern::Length(8),
+    };
 
     let result = generate(&config).unwrap();
 
@@ -160,10 +137,11 @@ fn test_generate() {
 
 #[test]
 fn test_fail_generate() {
-    let config = Config::new()
-        .with_charset(Charset::Alphanumeric)
-        .with_count(100)
-        .with_pattern(Pattern::Length(1));
+    let config = Config {
+        charset: Charset::Alphanumeric,
+        count: 100,
+        pattern: Pattern::Length(1),
+    };
 
     let result = generate(&config);
 
