@@ -1,4 +1,13 @@
+use std::collections::HashSet;
+
 use rand::{RngExt, distr::Distribution, seq::IteratorRandom};
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum ReferralCodeError {
+    #[error("Non feasible configuration")]
+    NonFeasibleConfig,
+}
 
 #[derive(Clone)]
 pub enum Charset {
@@ -137,4 +146,18 @@ fn is_feasible(config: &Config) -> bool {
         .len()
         .pow(u32::try_from(config.pattern.size()).unwrap())
         >= config.count
+}
+
+pub fn generate(config: &Config) -> Result<Vec<String>, ReferralCodeError> {
+    if !is_feasible(config) {
+        return Err(ReferralCodeError::NonFeasibleConfig);
+    }
+
+    let mut codes = HashSet::new();
+
+    while codes.len() < config.count {
+        codes.insert(generate_one(config));
+    }
+
+    Ok(codes.into_iter().collect())
 }
