@@ -83,9 +83,9 @@ impl Config {
         }
     }
 
-    pub fn with_size(self, size: Pattern) -> Self {
+    pub fn with_pattern(self, pattern: Pattern) -> Self {
         Self {
-            pattern: size,
+            pattern,
             count: self.count,
             charset: self.charset,
         }
@@ -104,22 +104,6 @@ impl Config {
             pattern: self.pattern,
             count: self.count,
             charset,
-        }
-    }
-
-    pub fn with_prefix(self, prefix: String) -> Self {
-        Self {
-            pattern: self.pattern,
-            count: self.count,
-            charset: self.charset,
-        }
-    }
-
-    pub fn with_postfix(self, postfix: String) -> Self {
-        Self {
-            pattern: self.pattern,
-            count: self.count,
-            charset: self.charset,
         }
     }
 }
@@ -160,4 +144,28 @@ pub fn generate(config: &Config) -> Result<Vec<String>, ReferralCodeError> {
     }
 
     Ok(codes.into_iter().collect())
+}
+
+#[test]
+fn test_generate() {
+    let config = Config::new()
+        .with_charset(Charset::Alphanumeric)
+        .with_count(3)
+        .with_pattern(Pattern::Length(8));
+
+    let result = generate(&config).unwrap();
+
+    assert_eq!(3, result.len());
+}
+
+#[test]
+fn test_fail_generate() {
+    let config = Config::new()
+        .with_charset(Charset::Alphanumeric)
+        .with_count(100)
+        .with_pattern(Pattern::Length(1));
+
+    let result = generate(&config);
+
+    assert!(result.is_err())
 }
