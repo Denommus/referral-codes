@@ -1,0 +1,23 @@
+* Referral codes
+
+This is a crate largely inspired by the [[https://www.npmjs.com/package/referral-codes][referral-codes]] library on NPM.
+
+The usage is similar. You can either use the default config
+
+#+begin_src rust
+  let config = Config::default();
+#+end_src
+
+Or define your own
+
+#+begin_src rust
+  let config = Config {
+      charset: Charset::Alphanumeric,
+      count: 3,
+      pattern: Pattern::Length(8),
+  }
+#+end_src
+
+Then, you can call =generate_one= to generate a single referral code,
+or you can call =generate= to generate =count= referral codes,
+according to the configuration defined above.
