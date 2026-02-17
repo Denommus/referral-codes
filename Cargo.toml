@@ -2,6 +2,11 @@
 name = "referral-codes"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+author = "Yuri Albuquerque"
+description = "Utility to generate referral codes"
+repository = "https://github.com/Denommus/referral-codes"
+homepage = "https://github.com/Denommus/referral-codes"
 
 [dependencies]
 rand = "0.10.0"
